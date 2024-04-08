@@ -1,5 +1,7 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param } from '@nestjs/common';
 import { AppService } from './app.service';
+
+import { MessageDTO } from './messages/message.dto';
 
 @Controller()
 export class AppController {
@@ -9,9 +11,19 @@ export class AppController {
   getFoo(): string {
     return "bar"
   }
-  
+
   @Get("/versions/latest")
   getLatestVersion(): object {
     return this.appService.getLatestVersion();
+  }
+
+  @Post("/messages/send")
+  postMessage(@Body() message: MessageDTO): object {
+    return {};
+  }
+
+  @Get("/messages/poll/:station")
+  getMessages(@Param() params: MessageDTO): object {
+    return { station: params.station };
   }
 }
