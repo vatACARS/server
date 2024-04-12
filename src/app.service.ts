@@ -26,7 +26,7 @@ export class AppService {
       }, {
         fileName: "uplinks.xml",
         subFolder: "data",
-        hash: "80f5db52742bc71b5deafd38f2156398"
+        hash: "eb8ac0ac12bac39eca1728a113342bbe"
       }
     ];
   }
