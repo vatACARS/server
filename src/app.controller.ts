@@ -17,6 +17,11 @@ export class AppController {
     return this.appService.getLatestVersion();
   }
 
+  @Get("/repository")
+  getRepository(): object {
+    return this.appService.getRepository();
+  }
+
   @Post("/messages/send")
   postMessage(@Body() message: MessageDTO): object {
     return {};
