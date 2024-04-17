@@ -7,27 +7,27 @@ import { MessageDTO } from './messages/message.dto';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Get("/foo")
+  @Get('/foo')
   getFoo(): string {
-    return "bar"
+    return 'bar';
   }
 
-  @Get("/versions/latest")
+  @Get('/versions/latest')
   getLatestVersion(): object {
     return this.appService.getLatestVersion();
   }
 
-  @Get("/repository")
+  @Get('/repository')
   getRepository(): object {
     return this.appService.getRepository();
   }
 
-  @Post("/messages/send")
+  @Post('/messages/send')
   postMessage(@Body() message: MessageDTO): object {
     return {};
   }
 
-  @Get("/messages/poll/:station")
+  @Get('/messages/poll/:station')
   getMessages(@Param() params: MessageDTO): object {
     return { station: params.station };
   }

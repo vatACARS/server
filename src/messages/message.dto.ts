@@ -1,5 +1,5 @@
 export class MessageDTO {
-    sender: string;
-    station: string;
-    data: string;
+  sender: string;
+  station: string;
+  data: string;
 }
