@@ -23,6 +23,11 @@ export class AppService {
         subFolder: 'data',
         hash: '6f0630ed77352f853bd956f47e251ae2',
       },
+      {
+        fileName: 'quickfill.json',
+        subFolder: 'data',
+        hash: '8ff4ee003cbc47cfbf66c9d0eb025770'
+      }
     ];
   }
 }
