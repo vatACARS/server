@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Redirect } from '@nestjs/common';
 import { AppService } from './app.service';
 
 import { MessageDTO } from './messages/message.dto';
@@ -15,10 +15,7 @@ export class AppController {
   }
 
   @Post('/hub/dist')
-  getHubVersionInformation(@Body() params: {platform: string, version: string}): object {
-    let data = fs.readFileSync(path.join(__dirname, 'updateData', params.version));
-    return data;
-  }
+  @Redirect('https://cdn.vatacars.com/files/main.yml', 301)
 
   @Get('/versions/latest')
   getLatestVersion(): object {
