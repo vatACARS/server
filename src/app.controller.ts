@@ -14,7 +14,7 @@ export class AppController {
     return 'bar';
   }
 
-  @Post('/hub/dist')
+  @Post('/hub/dist/:channel')
   @Redirect('https://cdn.vatacars.com/files/main.yml', 301)
 
   @Get('/versions/latest')
