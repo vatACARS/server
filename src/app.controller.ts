@@ -1,6 +1,5 @@
-import fs from 'node:fs';
-import path from 'node:path';
-import { Controller, Get, Post, Body, Param, Redirect } from '@nestjs/common';
+import { Response } from 'express';
+import { Controller, Get, Post, Body, Param, Query, Res } from '@nestjs/common';
 import { AppService } from './app.service';
 
 import { MessageDTO } from './messages/message.dto';
@@ -14,8 +13,10 @@ export class AppController {
     return 'bar';
   }
 
-  @Post('/hub/dist/:channel')
-  @Redirect('https://cdn.vatacars.com/files/main.yml', 301)
+  @Get('/hub/dist/:channel')
+  getUpdateChannel(@Query() query: { noCache: string }, @Res() res: Response) {
+    res.redirect(`https://cdn.vatacars.com/files/main.yml?noCache=${query.noCache}`)
+  }
 
   @Get('/versions/latest')
   getLatestVersion(): object {
