@@ -12,6 +12,11 @@ export class AppController {
     return 'bar';
   }
 
+  @Get('/hub/:platform/:version')
+  getHubVersionInformation(@Param() params: {platform: string, version: string}): object {
+    return { params };
+  }
+
   @Get('/versions/latest')
   getLatestVersion(): object {
     return this.appService.getLatestVersion();
