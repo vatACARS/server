@@ -1,3 +1,5 @@
+import fs from 'node:fs';
+import path from 'node:path';
 import { Controller, Get, Post, Body, Param } from '@nestjs/common';
 import { AppService } from './app.service';
 
@@ -12,9 +14,10 @@ export class AppController {
     return 'bar';
   }
 
-  @Get('/hub/:platform/:version')
-  getHubVersionInformation(@Param() params: {platform: string, version: string}): object {
-    return { params };
+  @Post('/hub/dist')
+  getHubVersionInformation(@Body() params: {platform: string, version: string}): object {
+    let data = fs.readFileSync(path.join(__dirname, 'updateData', params.version));
+    return data;
   }
 
   @Get('/versions/latest')
