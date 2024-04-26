@@ -13,9 +13,9 @@ export class AppController {
     return 'bar';
   }
 
-  @Get('/hub/dist/:channel')
-  getUpdateChannel(@Query() query: { noCache: string }, @Res() res: Response) {
-    res.redirect(`https://cdn.vatacars.com/files/main.yml?noCache=${query.noCache}`)
+  @Get('/hub/dist/:file')
+  getUpdateChannel(@Param() params: { file: string }, @Query() query: { noCache: string }, @Res() res: Response) {
+    res.redirect(`https://cdn.vatacars.com/dist/${params.file}?noCache=${query.noCache}`)
   }
 
   @Get('/versions/latest')
