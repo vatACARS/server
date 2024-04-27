@@ -14,8 +14,8 @@ export class AppController {
   }
 
   @Get('/hub/dist/:file')
-  getUpdateChannel(@Param() params: { file: string }, @Query() query: { noCache: string }, @Res() res: Response) {
-    res.redirect(`https://cdn.vatacars.com/dist/${params.file}?noCache=${query.noCache}`)
+  getUpdateChannel(@Param() params: { file: string }, @Res() res: Response) {
+    res.redirect(`https://dist.vatacars.com/releases/${this.appService.getLatestHubVersion()}/${params.file}`)
   }
 
   @Get('/versions/latest')
