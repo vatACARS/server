@@ -28,13 +28,13 @@ export class AppService {
         fileName: 'uplinks.xml',
         location: 'hub/data',
         subFolder: 'data',
-        hash: '6f0630ed77352f853bd956f47e251ae2',
+        hash: '37faeaa9a09fb28d3d677a99b72addd6',
       },
       {
         fileName: 'quickfill.json',
         location: 'hub/data',
         subFolder: 'data',
-        hash: '8ff4ee003cbc47cfbf66c9d0eb025770'
+        hash: 'd41d8cd98f00b204e9800998ecf8427e'
       }
     ];
   }
