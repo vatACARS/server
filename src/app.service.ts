@@ -34,7 +34,7 @@ export class AppService {
         fileName: 'quickfill.json',
         location: 'hub/data',
         subFolder: 'data',
-        hash: 'd41d8cd98f00b204e9800998ecf8427e'
+        hash: 'daa7b13bb2bcc6af187ddd74a63ceeaf'
       }
     ];
   }
