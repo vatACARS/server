@@ -50,8 +50,13 @@ export class AppController {
     })
   }
 
+  @Get('/atsu/online')
+  async getATSUOnline(): Promise<ATSUInformationModel[]> {
+    return this.atsuService.ATSUInformationCollection({});
+  }
+
   @Get('/atsu/poll/:station')
   async getMessages(@Param("station") station: string): Promise<ATSUMessageModel[]> {
-    return this.atsuMessageService.ATSUMessages({ where: { station }});
+    return this.atsuMessageService.ATSUMessageCollection({ where: { station }});
   }
 }
