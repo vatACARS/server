@@ -43,7 +43,7 @@ export class AppController {
     const CurATSUStation = await this.atsuService.ATSUInformation({ station_code: station });
     if(CurATSUStation) return { success: false, message: `${station} is already opened by CID ${CurATSUStation.acars_user_id}` };
 
-    const UserATSUStation = await this.atsuService.ATSUInformation({ acars_user_id: ACARSUserData.cid });
+    const UserATSUStation = await this.atsuService.ATSUInformation({ acars_user_id: ACARSUserData.vatACARSUserData.data.cid });
     if(UserATSUStation) {
       await this.atsuService.deleteATSUInformation({ acars_user_id: UserATSUStation.acars_user_id });
     }
