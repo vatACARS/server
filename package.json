@@ -26,6 +26,7 @@
     "@nestjs/mongoose": "^10.0.5",
     "@nestjs/platform-express": "^10.0.0",
     "@prisma/client": "^5.15.0",
+    "agenda": "^5.0.0",
     "mongoose": "^8.3.0",
     "prisma": "^5.15.0",
     "reflect-metadata": "^0.2.0",
