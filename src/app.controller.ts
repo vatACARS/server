@@ -2,6 +2,7 @@ import { Response } from 'express';
 import { Controller, Get, Post, Body, Param, Query, Res } from '@nestjs/common';
 import { AppService } from './app.service';
 
+import { AgendaService } from './agenda/agenda.service';
 import { ATSUService } from "./prisma/atsu.service";
 import { ATSUMessageService } from "./prisma/atsuMessage.service";
 import { ATSUInformation as ATSUInformationModel, ATSUMessage as ATSUMessageModel } from "@prisma/client";
@@ -10,6 +11,7 @@ import { ATSUInformation as ATSUInformationModel, ATSUMessage as ATSUMessageMode
 export class AppController {
   constructor(
     private readonly appService: AppService,
+    private readonly agendaService: AgendaService,
     private readonly atsuService: ATSUService,
     private readonly atsuMessageService: ATSUMessageService
   ) { }
@@ -64,6 +66,29 @@ export class AppController {
         opened: new Date(),
         acars_user_id: ACARSUserData.vatACARSUserData.data.cid
       })
+    }
+  }
+
+  @Post('/atsu/heartbeat')
+  async postHeartbeat(@Body() body: any): Promise<{ success: boolean, message: string, ATSU: ATSUInformationModel } | { success: false, message: string }> {
+    const { token, station } = body;
+    if (station.length != 4) return { success: false, message: "Invalid station code" };
+    const ACARSUserData = await fetch(`https://vatacars.com/api/client/me?token=${token}`).then(resp => resp.json());
+    if (!ACARSUserData.success) return { success: false, message: "Not authorised" };
+
+    const CurATSUStation = await this.atsuService.ATSUInformation({ station_code: station.toUpperCase() });
+    if (CurATSUStation) {
+      if(CurATSUStation.acars_user_id != ACARSUserData.vatACARSUserData.data.cid) return { success: false, message: `${station.toUpperCase()} is already opened by CID ${CurATSUStation.acars_user_id}` };
+      return {
+        success: true,
+        message: `Logged in as ${station.toUpperCase()}`,
+        ATSU: CurATSUStation
+      }
+    }
+
+    return {
+      success: false,
+      message: `Can't find active station: ${station}`
     }
   }
 
