@@ -1,0 +1,30 @@
+generator client {
+  provider   = "prisma-client-js"
+  engineType = "binary"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("database_url")
+}
+
+model ATSUInformation {
+  id            String          @id @default(auto()) @map("_id") @db.ObjectId
+  station_code  String          @unique
+  opened        DateTime
+  acars_user_id String          @unique @db.ObjectId
+  transmissions ATSUMessage[]
+}
+
+model ATSUMessage {
+  id                String            @id @default(auto()) @map("_id") @db.ObjectId
+  station           String
+  type              String
+  from              String
+  to                String
+  message_id        Int?
+  reply_message_id  Int?
+  sent_time         DateTime
+  relayed_time      DateTime
+  ATSUInformation   ATSUInformation   @relation(fields: [station], references: [id])
+}
