@@ -12,7 +12,7 @@ export class AppController {
     private readonly appService: AppService,
     private readonly atsuService: ATSUService,
     private readonly atsuMessageService: ATSUMessageService
-  ) {}
+  ) { }
 
   @Get('/foo')
   getFoo(): string {
@@ -35,25 +35,29 @@ export class AppController {
   }
 
   @Post('/atsu/logon')
-  async postLogon(@Body() body: any): Promise<ATSUInformationModel | any> {
+  async postLogon(@Body() body: any): Promise<{ success: boolean, message: string, ATSU: ATSUInformationModel } | { success: false, message: string }> {
     const { token, station } = body;
-    if(station.length != 4) return { success: false, message: "Invalid station code" };
+    if (station.length != 4) return { success: false, message: "Invalid station code" };
     const ACARSUserData = await fetch(`https://vatacars.com/api/client/me?token=${token}`).then(resp => resp.json());
-    if(!ACARSUserData.success) return { success: false, message: "Not authorised" };
+    if (!ACARSUserData.success) return { success: false, message: "Not authorised" };
 
     const CurATSUStation = await this.atsuService.ATSUInformation({ station_code: station.toUpperCase() });
-    if(CurATSUStation) return { success: false, message: `${station.toUpperCase()} is already opened by CID ${CurATSUStation.acars_user_id}` };
+    if (CurATSUStation) return { success: false, message: `${station.toUpperCase()} is already opened by CID ${CurATSUStation.acars_user_id}` };
 
     const UserATSUStation = await this.atsuService.ATSUInformation({ acars_user_id: ACARSUserData.vatACARSUserData.data.cid });
-    if(UserATSUStation) {
+    if (UserATSUStation) {
       await this.atsuService.deleteATSUInformation({ acars_user_id: UserATSUStation.acars_user_id });
     }
-    
-    return this.atsuService.createATSUInformation({
-      station_code: station.toUpperCase(),
-      opened: new Date(),
-      acars_user_id: ACARSUserData.vatACARSUserData.data.cid
-    })
+
+    return {
+      success: true,
+      message: `Logged in as ${station.toUpperCase()}`,
+      ATSU: await this.atsuService.createATSUInformation({
+        station_code: station.toUpperCase(),
+        opened: new Date(),
+        acars_user_id: ACARSUserData.vatACARSUserData.data.cid
+      })
+    }
   }
 
   @Get('/atsu/online')
@@ -63,6 +67,6 @@ export class AppController {
 
   @Get('/atsu/poll/:station')
   async getMessages(@Param("station") station: string): Promise<ATSUMessageModel[]> {
-    return this.atsuMessageService.ATSUMessageCollection({ where: { station }});
+    return this.atsuMessageService.ATSUMessageCollection({ where: { station } });
   }
 }
