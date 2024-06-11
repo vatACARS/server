@@ -22,7 +22,7 @@ export class AgendaService implements OnModuleInit {
             const ATSUStation: ATSUInformation = await this.atsuService.ATSUInformation({ station_code });
             if(ATSUStation) await this.atsuService.deleteATSUInformation({ station_code });
 
-            job.delete();
+            job.remove();
         });
     }
 }
