@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AgendaService } from './agenda/agenda.service';
 import { PrismaService } from './prisma/prisma.service';
 import { ATSUService } from './prisma/atsu.service';
 import { ATSUMessageService } from './prisma/atsuMessage.service';
@@ -13,6 +14,7 @@ import { DB_URL } from './config';
   controllers: [AppController],
   providers: [
     AppService,
+    AgendaService,
     PrismaService,
     ATSUService,
     ATSUMessageService
