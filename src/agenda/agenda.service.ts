@@ -1,12 +1,12 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
-import Agenda from "agenda";
+const Agenda = require("agenda");
 
 import { ATSUInformation } from '@prisma/client';
 import { ATSUService } from 'src/prisma/atsu.service';
 
 @Injectable()
 export class AgendaService implements OnModuleInit {
-    agenda: Agenda;
+    agenda: any;
     
     constructor(
         private readonly atsuService: ATSUService
