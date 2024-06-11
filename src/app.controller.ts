@@ -58,6 +58,7 @@ export class AppController {
       await this.atsuService.deleteATSUInformation({ acars_user_id: UserATSUStation.acars_user_id });
     }
 
+    await this.agendaService.agenda.schedule("in 2 minutes", "logout inactive ATSU", { station_code: station.toUpperCase() });
     return {
       success: true,
       message: `Logged in as ${station.toUpperCase()}`,
@@ -79,6 +80,9 @@ export class AppController {
     const CurATSUStation = await this.atsuService.ATSUInformation({ station_code: station.toUpperCase() });
     if (CurATSUStation) {
       if(CurATSUStation.acars_user_id != ACARSUserData.vatACARSUserData.data.cid) return { success: false, message: `${station.toUpperCase()} is already opened by CID ${CurATSUStation.acars_user_id}` };
+
+      await this.agendaService.agenda.cancel({ data: { station_code: station }});
+      await this.agendaService.agenda.schedule("in 2 minutes", "logout inactive ATSU", { station_code: station.toUpperCase() });
       return {
         success: true,
         message: `Logged in as ${station.toUpperCase()}`,
