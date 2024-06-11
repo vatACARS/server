@@ -10,7 +10,7 @@ export class ATSUMessageService {
         return this.prisma.aTSUMessage.findUnique({ where: ATSUMessageWhereUniqueInput });
     }
 
-    async ATSUMessages(params: {
+    async ATSUMessageCollection(params: {
         skip?: number;
         take?: number;
         cursor?: Prisma.ATSUMessageWhereUniqueInput;
