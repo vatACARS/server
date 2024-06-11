@@ -41,8 +41,8 @@ export class AppController {
     const ACARSUserData = await fetch(`https://vatacars.com/api/client/me?token=${token}`).then(resp => resp.json());
     if(!ACARSUserData.success) return { success: false, message: "Not authorised" };
 
-    const CurATSUStation = await this.atsuService.ATSUInformation({ station_code: station });
-    if(CurATSUStation) return { success: false, message: `${station} is already opened by CID ${CurATSUStation.acars_user_id}` };
+    const CurATSUStation = await this.atsuService.ATSUInformation({ station_code: station.toUpperCase() });
+    if(CurATSUStation) return { success: false, message: `${station.toUpperCase()} is already opened by CID ${CurATSUStation.acars_user_id}` };
 
     const UserATSUStation = await this.atsuService.ATSUInformation({ acars_user_id: ACARSUserData.vatACARSUserData.data.cid });
     if(UserATSUStation) {
@@ -50,7 +50,7 @@ export class AppController {
     }
     
     return this.atsuService.createATSUInformation({
-      station_code: station,
+      station_code: station.toUpperCase(),
       opened: new Date(),
       acars_user_id: ACARSUserData.vatACARSUserData.data.cid
     })
