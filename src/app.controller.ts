@@ -42,7 +42,14 @@ export class AppController {
     if (!ACARSUserData.success) return { success: false, message: "Not authorised" };
 
     const CurATSUStation = await this.atsuService.ATSUInformation({ station_code: station.toUpperCase() });
-    if (CurATSUStation) return { success: false, message: `${station.toUpperCase()} is already opened by CID ${CurATSUStation.acars_user_id}` };
+    if (CurATSUStation) {
+      if(CurATSUStation.acars_user_id != ACARSUserData.vatACARSUserData.data.cid) return { success: false, message: `${station.toUpperCase()} is already opened by CID ${CurATSUStation.acars_user_id}` };
+      return {
+        success: true,
+        message: `Logged in as ${station.toUpperCase()}`,
+        ATSU: CurATSUStation
+      }
+    }
 
     const UserATSUStation = await this.atsuService.ATSUInformation({ acars_user_id: ACARSUserData.vatACARSUserData.data.cid });
     if (UserATSUStation) {
