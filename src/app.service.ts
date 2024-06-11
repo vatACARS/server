@@ -15,6 +15,36 @@ export class AppService {
     };
   }
 
+  getAvailableClients(): object {
+    return [{
+      name: "Controller",
+      localVersion: "0.0.1",
+      description: "The vatACARS plugin for vatSys is a faithfully recreated CPDLC interface designed to seamlessly assist with a controller's workflow. Providing a direct integration with Hoppies ACARS, controllers are immediately able to connect with pilots that are using either our pilot client or one of many others publicly available.",
+      status: "waiting",
+      selectedVersion: 0,
+      versions: [{
+        id: 0,
+        label: "Stable",
+        version: "0.0.1"
+      }/*, {
+          id: 1,
+          label: "Bleeding Edge",
+          version: "0.0.1-be"
+      }*/]
+    }, {
+      name: "Pilot",
+      localVersion: "",
+      description: "To be announced!",
+      status: "disabled",
+      selectedVersion: -1,
+      versions: [{
+        id: 0,
+        label: "Not Available",
+        version: "X.X.X"
+      }]
+    }]
+  }
+
   getRepository(): object {
     // TBD: Dynamically grab this from CDN
     return [

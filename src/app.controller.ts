@@ -16,11 +16,6 @@ export class AppController {
     private readonly atsuMessageService: ATSUMessageService
   ) { }
 
-  @Get('/foo')
-  getFoo(): string {
-    return 'bar';
-  }
-
   @Get('/hub/dist/:file')
   getUpdateChannel(@Param() params: { file: string }, @Res() res: Response) {
     res.redirect(`https://dist.vatacars.com/releases/${this.appService.getLatestHubVersion()}/${params.file}`)
@@ -34,6 +29,11 @@ export class AppController {
   @Get('/repository')
   getRepository(): object {
     return this.appService.getRepository();
+  }
+
+  @Get('/hub/clientInformation')
+  getAvailableClients(): object {
+    return this.appService.getAvailableClients();
   }
 
   @Post('/atsu/logon')
