@@ -37,8 +37,9 @@ export class AppController {
   @Post('/atsu/logon')
   async postLogon(@Body() body: any): Promise<ATSUInformationModel | any> {
     const { token, station } = body;
+    if(station.length != 4) return { success: false, message: "Invalid station code" };
     const ACARSUserData = await fetch(`https://vatacars.com/api/client/me?token=${token}`).then(resp => resp.json());
-    if(!ACARSUserData.success) return { success: false, message: "Not authorised." };
+    if(!ACARSUserData.success) return { success: false, message: "Not authorised" };
 
     const CurATSUStation = await this.atsuService.ATSUInformation({ station_code: station });
     if(CurATSUStation) return { success: false, message: `${station} is already opened by CID ${CurATSUStation.acars_user_id}` };
