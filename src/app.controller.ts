@@ -46,6 +46,8 @@ export class AppController {
     const CurATSUStation = await this.atsuService.ATSUInformation({ station_code: station.toUpperCase() });
     if (CurATSUStation) {
       if(CurATSUStation.cid != ACARSUserData.vatACARSUserData.data.cid) return { success: false, message: `${station.toUpperCase()} is already opened by CID ${CurATSUStation.cid}` };
+      await this.agendaService.agenda.cancel({ data: { station_code: station }});
+      await this.agendaService.agenda.schedule("in 2 minutes", "logout inactive ATSU", { station_code: station.toUpperCase() });
       return {
         success: true,
         message: `Logged in as ${station.toUpperCase()}`,
