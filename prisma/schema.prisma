@@ -14,6 +14,7 @@ model ATSUInformation {
   opened        DateTime
   cid           String          @unique
   sectors       Json
+  approxLoc     Json
   transmissions ATSUMessage[]
 }
 
