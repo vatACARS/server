@@ -46,6 +46,9 @@ export class AppController {
     const CurATSUStation = await this.atsuService.ATSUInformation({ station_code: station.toUpperCase() });
     if (CurATSUStation) {
       if(CurATSUStation.cid != ACARSUserData.vatACARSUserData.data.cid) return { success: false, message: `${station.toUpperCase()} is already opened by CID ${CurATSUStation.cid}` };
+
+      if(CurATSUStation.sectors != sectors) await this.atsuService.updateATSUInformation({ where: { station_code: station.toUpperCase() }, data: { sectors } });
+      if(CurATSUStation.approxLoc != approxLoc) await this.atsuService.updateATSUInformation({ where: { station_code: station.toUpperCase() }, data: { approxLoc } });
       await this.agendaService.agenda.cancel({ data: { station_code: station }});
       await this.agendaService.agenda.schedule("in 2 minutes", "logout inactive ATSU", { station_code: station.toUpperCase() });
       return {
