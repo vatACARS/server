@@ -12,7 +12,8 @@ model ATSUInformation {
   id            String          @id @default(auto()) @map("_id") @db.ObjectId
   station_code  String          @unique
   opened        DateTime
-  acars_user_id String          @unique
+  cid           String          @unique
+  sectors       Json
   transmissions ATSUMessage[]
 }
 
