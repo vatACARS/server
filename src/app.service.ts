@@ -58,7 +58,7 @@ export class AppService {
         fileName: 'error.wav',
         location: 'hub/audio',
         subFolder: 'audio',
-        hash: 'd41d8cd98f00b204e9800998ecf8427e'
+        hash: 'becb19f88e88ddef057908cbca90f63b'
       },
       {
         fileName: 'uplinks.xml',
