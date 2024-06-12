@@ -38,7 +38,7 @@ export class AppController {
 
   @Post('/atsu/logon')
   async postLogon(@Body() body: any): Promise<{ success: boolean, message: string, ATSU: ATSUInformationModel } | { success: false, message: string }> {
-    const { token, station, sectors } = body;
+    const { token, station, sectors, approxLoc } = body;
     if (station.length != 4) return { success: false, message: "Invalid station code" };
     const ACARSUserData = await fetch(`https://vatacars.com/api/client/me?token=${token}`).then(resp => resp.json());
     if (!ACARSUserData.success) return { success: false, message: "Not authorised" };
@@ -66,6 +66,7 @@ export class AppController {
         station_code: station.toUpperCase(),
         opened: new Date(),
         sectors,
+        approxLoc,
         cid: ACARSUserData.vatACARSUserData.data.cid
       })
     }
@@ -73,7 +74,7 @@ export class AppController {
 
   @Post('/atsu/heartbeat')
   async postHeartbeat(@Body() body: any): Promise<{ success: boolean, message: string, ATSU: ATSUInformationModel } | { success: false, message: string }> {
-    const { token, station, sectors } = body;
+    const { token, station, sectors, approxLoc } = body;
     if (station.length != 4) return { success: false, message: "Invalid station code" };
     const ACARSUserData = await fetch(`https://vatacars.com/api/client/me?token=${token}`).then(resp => resp.json());
     if (!ACARSUserData.success) return { success: false, message: "Not authorised" };
@@ -82,6 +83,7 @@ export class AppController {
     if (CurATSUStation) {
       if(CurATSUStation.cid != ACARSUserData.vatACARSUserData.data.cid) return { success: false, message: `${station.toUpperCase()} is already opened by CID ${CurATSUStation.cid}` };
       if(CurATSUStation.sectors != sectors) await this.atsuService.updateATSUInformation({ where: { station_code: station.toUpperCase() }, data: { sectors } });
+      if(CurATSUStation.approxLoc != approxLoc) await this.atsuService.updateATSUInformation({ where: { station_code: station.toUpperCase() }, data: { approxLoc } });
 
       await this.agendaService.agenda.cancel({ data: { station_code: station }});
       await this.agendaService.agenda.schedule("in 2 minutes", "logout inactive ATSU", { station_code: station.toUpperCase() });
