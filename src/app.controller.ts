@@ -38,14 +38,14 @@ export class AppController {
 
   @Post('/atsu/logon')
   async postLogon(@Body() body: any): Promise<{ success: boolean, message: string, ATSU: ATSUInformationModel } | { success: false, message: string }> {
-    const { token, station } = body;
+    const { token, station, sectors } = body;
     if (station.length != 4) return { success: false, message: "Invalid station code" };
     const ACARSUserData = await fetch(`https://vatacars.com/api/client/me?token=${token}`).then(resp => resp.json());
     if (!ACARSUserData.success) return { success: false, message: "Not authorised" };
 
     const CurATSUStation = await this.atsuService.ATSUInformation({ station_code: station.toUpperCase() });
     if (CurATSUStation) {
-      if(CurATSUStation.acars_user_id != ACARSUserData.vatACARSUserData.data.cid) return { success: false, message: `${station.toUpperCase()} is already opened by CID ${CurATSUStation.acars_user_id}` };
+      if(CurATSUStation.cid != ACARSUserData.vatACARSUserData.data.cid) return { success: false, message: `${station.toUpperCase()} is already opened by CID ${CurATSUStation.cid}` };
       return {
         success: true,
         message: `Logged in as ${station.toUpperCase()}`,
@@ -53,9 +53,9 @@ export class AppController {
       }
     }
 
-    const UserATSUStation = await this.atsuService.ATSUInformation({ acars_user_id: ACARSUserData.vatACARSUserData.data.cid });
+    const UserATSUStation = await this.atsuService.ATSUInformation({ cid: ACARSUserData.vatACARSUserData.data.cid });
     if (UserATSUStation) {
-      await this.atsuService.deleteATSUInformation({ acars_user_id: UserATSUStation.acars_user_id });
+      await this.atsuService.deleteATSUInformation({ cid: UserATSUStation.cid });
     }
 
     await this.agendaService.agenda.schedule("in 2 minutes", "logout inactive ATSU", { station_code: station.toUpperCase() });
@@ -65,21 +65,23 @@ export class AppController {
       ATSU: await this.atsuService.createATSUInformation({
         station_code: station.toUpperCase(),
         opened: new Date(),
-        acars_user_id: ACARSUserData.vatACARSUserData.data.cid
+        sectors,
+        cid: ACARSUserData.vatACARSUserData.data.cid
       })
     }
   }
 
   @Post('/atsu/heartbeat')
   async postHeartbeat(@Body() body: any): Promise<{ success: boolean, message: string, ATSU: ATSUInformationModel } | { success: false, message: string }> {
-    const { token, station } = body;
+    const { token, station, sectors } = body;
     if (station.length != 4) return { success: false, message: "Invalid station code" };
     const ACARSUserData = await fetch(`https://vatacars.com/api/client/me?token=${token}`).then(resp => resp.json());
     if (!ACARSUserData.success) return { success: false, message: "Not authorised" };
 
     const CurATSUStation = await this.atsuService.ATSUInformation({ station_code: station.toUpperCase() });
     if (CurATSUStation) {
-      if(CurATSUStation.acars_user_id != ACARSUserData.vatACARSUserData.data.cid) return { success: false, message: `${station.toUpperCase()} is already opened by CID ${CurATSUStation.acars_user_id}` };
+      if(CurATSUStation.cid != ACARSUserData.vatACARSUserData.data.cid) return { success: false, message: `${station.toUpperCase()} is already opened by CID ${CurATSUStation.cid}` };
+      if(CurATSUStation.sectors != sectors) await this.atsuService.updateATSUInformation({ where: { station_code: station.toUpperCase() }, data: { sectors } });
 
       await this.agendaService.agenda.cancel({ data: { station_code: station }});
       await this.agendaService.agenda.schedule("in 2 minutes", "logout inactive ATSU", { station_code: station.toUpperCase() });
