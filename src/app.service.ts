@@ -9,7 +9,7 @@ export class AppService {
 
   getLatestVersion(): object {
     return {
-      version: '1.0.1',
+      version: '1.0.0',
       changes: ["Initial release of the vatACARS plugin for vatSys."],
       releaseDateTime: '2024-06-14T03:54:14.433Z',
     };
