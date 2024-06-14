@@ -9,23 +9,23 @@ export class AppService {
 
   getLatestVersion(): object {
     return {
-      version: '1.0.0',
-      changes: [],
-      releaseDateTime: '2024-04-08T09:08:26.407Z',
+      version: '1.0.1',
+      changes: ["Initial release of the vatACARS plugin for vatSys."],
+      releaseDateTime: '2024-06-14T03:54:14.433Z',
     };
   }
 
   getAvailableClients(): object {
     return [{
       name: "Controller",
-      localVersion: "0.0.1",
+      localVersion: "",
       description: "The vatACARS plugin for vatSys is a faithfully recreated CPDLC interface designed to seamlessly assist with a controller's workflow. Providing a direct integration with Hoppies ACARS, controllers are immediately able to connect with pilots that are using either our pilot client or one of many others publicly available.",
-      status: "disabled",
-      selectedVersion: -1,
+      status: "waiting",
+      selectedVersion: 0,
       versions: [{
         id: 0,
-        label: "Not Available",
-        version: "X.X.X"
+        label: "Early Access",
+        version: "1.0.1"
       }/*, {
           id: 1,
           label: "Bleeding Edge",
