@@ -20,8 +20,8 @@ export class AppService {
       name: "Controller",
       localVersion: "",
       description: "The vatACARS plugin for vatSys is a faithfully recreated CPDLC interface designed to seamlessly assist with a controller's workflow. Providing a direct integration with Hoppies ACARS, controllers are immediately able to connect with pilots that are using either our pilot client or one of many others publicly available.",
-      status: "waiting",
-      selectedVersion: 0,
+      status: "disabled",
+      selectedVersion: -1,
       versions: [{
         id: 0,
         label: "Early Access",
