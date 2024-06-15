@@ -4,7 +4,7 @@ import { Injectable } from '@nestjs/common';
 export class AppService {
   getLatestHubVersion(): string {
     // TDB: Dynamically grab this from CDN
-    return "1.0.0";
+    return "1.0.1";
   }
 
   getLatestVersion(): object {
