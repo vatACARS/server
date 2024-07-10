@@ -1,28 +1,34 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 const Agenda = require("agenda");
 
-import { ATSUInformation } from '@prisma/client';
 import { ATSUService } from 'src/prisma/atsu.service';
+import { ATSUMessageService } from 'src/prisma/atsuMessage.service';
+
+import {
+    defineLogoutInactiveATSU
+} from './definitions';
+
+import {
+    defineExpireATSUMessage
+} from './definitions';
 
 @Injectable()
 export class AgendaService implements OnModuleInit {
     agenda: any;
     
     constructor(
-        private readonly atsuService: ATSUService
+        private readonly atsuService: ATSUService,
+        private readonly atsuMessageService: ATSUMessageService
     ) {
         this.agenda = new Agenda({ db: { address: process.env.database_url, collection: "tasks" } });
         this.agenda.start();
     }
 
     async onModuleInit() {
-        this.agenda.define("logout inactive ATSU", async job => {
-            const { station_code } = job.attrs.data;
+        // ATSUService
+        defineLogoutInactiveATSU(this.agenda, this.atsuService);
 
-            const ATSUStation: ATSUInformation = await this.atsuService.ATSUInformation({ station_code });
-            if(ATSUStation) await this.atsuService.deleteATSUInformation({ station_code });
-
-            job.remove();
-        });
+        // ATSUMessageService
+        defineExpireATSUMessage(this.agenda, this.atsuMessageService);
     }
 }
