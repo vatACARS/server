@@ -48,7 +48,7 @@ export class AppController {
   }
 
   @Post('/atsu/logon')
-  @ApiOperation({ summary: "Initiate a connection to vatACARS as a controller." })
+  @ApiOperation({ summary: "Initiate a connection to vatACARS as a controller.", requestBody: { content: { "application/json": { schema: { type: "object", properties: { token: { type: "string" }, station: { type: "string" }, sectors: { type: "string" }, approxLoc: { type: "string" } }, required: ["token", "station", "sectors", "approxLoc"] } } } } })
   @ApiResponse({ status: 200, description: "Successfully logged in as ATSU.", type: class ATSUResponse { // Todo: this should be somewhere else
     success: boolean;
     message: string;
@@ -59,7 +59,7 @@ export class AppController {
   @ApiResponse({ status: 403, description: "Station already opened by another controller." })
   async postLogon(@Body() body: any, @Res() response: Response): Promise<Response> {
     const { token, station, sectors, approxLoc } = body;
-    if (station.length != 4) return response.status(HttpStatus.BAD_REQUEST).json({ success: false, message: "Invalid station code" });
+    if (station.length != 4 || !station) return response.status(HttpStatus.BAD_REQUEST).json({ success: false, message: "Invalid station code" });
     const ACARSUserData = await fetch(`https://vatacars.com/api/client/me?token=${token}`).then(resp => resp.json());
     if (!ACARSUserData.success) return response.status(HttpStatus.UNAUTHORIZED).json({ success: false, message: "Not authorised" });
 
