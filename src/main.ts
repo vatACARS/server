@@ -7,12 +7,10 @@ import {
   SwaggerModule,
 } from '@nestjs/swagger';
 
+import { SwaggerTheme, SwaggerThemeNameEnum } from 'swagger-themes';
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
-  const options: SwaggerDocumentOptions = {
-    operationIdFactory: (controllerKey: string, methodKey: string) => methodKey,
-  };
 
   const config = new DocumentBuilder()
     .setTitle('vatACARS Server API')
@@ -24,9 +22,15 @@ async function bootstrap() {
     .addBearerAuth()
     .build();
 
-  const document = SwaggerModule.createDocument(app, config, options);
+  const document = SwaggerModule.createDocument(app, config, { operationIdFactory: (controllerKey: string, methodKey: string) => methodKey });
 
-  SwaggerModule.setup('docs', app, document);
+  const theme = new SwaggerTheme();
+  const darkStyle = theme.getBuffer(SwaggerThemeNameEnum.DARK_MONOKAI);
+
+  SwaggerModule.setup('docs', app, document, {
+    explorer: true,
+    customCss: darkStyle
+  });
 
   await app.listen(8002);
 }
