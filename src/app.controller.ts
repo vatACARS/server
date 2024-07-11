@@ -1,13 +1,21 @@
 import { Response } from 'express';
-import { Controller, Get, Post, Body, Param, Query, Res } from '@nestjs/common';
-import { AppService } from './app.service';
+import { Controller, Get, Post, Body, Param, HttpStatus, Res, Type } from '@nestjs/common';
 
+import {
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+  ApiHideProperty
+} from '@nestjs/swagger';
+
+import { AppService } from './app.service';
 import { AgendaService } from './agenda/agenda.service';
 import { ATSUService } from "./prisma/atsu.service";
 import { ATSUMessageService } from "./prisma/atsuMessage.service";
 import { ATSUInformation as ATSUInformationModel, ATSUMessage as ATSUMessageModel } from "@prisma/client";
 
 @Controller()
+@ApiTags("vatACARS")
 export class AppController {
   constructor(
     private readonly appService: AppService,
@@ -17,6 +25,7 @@ export class AppController {
   ) { }
 
   @Get('/hub/dist/:file')
+  @ApiHideProperty()
   getUpdateChannel(@Param() params: { file: string }, @Res() res: Response) {
     res.redirect(`https://dist.vatacars.com/releases/${this.appService.getLatestHubVersion()}/${params.file}`)
   }
@@ -27,44 +36,53 @@ export class AppController {
   }
 
   @Get('/repository')
+  @ApiHideProperty()
   getRepository(): object {
     return this.appService.getRepository();
   }
 
   @Get('/hub/clientInformation')
+  @ApiHideProperty()
   getAvailableClients(): object {
     return this.appService.getAvailableClients();
   }
 
   @Post('/atsu/logon')
-  async postLogon(@Body() body: any): Promise<{ success: boolean, message: string, ATSU: ATSUInformationModel } | { success: false, message: string }> {
+  @ApiOperation({ summary: "Initiate a connection to vatACARS as a controller." })
+  @ApiResponse({ status: 200, description: "Successfully logged in as ATSU.", type: class ATSUResponse { // Todo: this should be somewhere else
+    success: boolean;
+    message: string;
+    ATSU: ATSUInformationModel
+  } })
+  @ApiResponse({ status: 400, description: "Invalid station code." })
+  @ApiResponse({ status: 401, description: "Not authorised." })
+  @ApiResponse({ status: 403, description: "Station already opened by another controller." })
+  async postLogon(@Body() body: any, @Res() response: Response): Promise<Response> {
     const { token, station, sectors, approxLoc } = body;
-    if (station.length != 4) return { success: false, message: "Invalid station code" };
+    if (station.length != 4) return response.status(HttpStatus.BAD_REQUEST).json({ success: false, message: "Invalid station code" });
     const ACARSUserData = await fetch(`https://vatacars.com/api/client/me?token=${token}`).then(resp => resp.json());
-    if (!ACARSUserData.success) return { success: false, message: "Not authorised" };
+    if (!ACARSUserData.success) return response.status(HttpStatus.UNAUTHORIZED).json({ success: false, message: "Not authorised" });
 
     const CurATSUStation = await this.atsuService.ATSUInformation({ station_code: station.toUpperCase() });
     if (CurATSUStation) {
-      if(CurATSUStation.cid != ACARSUserData.vatACARSUserData.data.cid) return { success: false, message: `${station.toUpperCase()} is already opened by CID ${CurATSUStation.cid}` };
+      if(CurATSUStation.cid != ACARSUserData.vatACARSUserData.data.cid) return response.status(HttpStatus.FORBIDDEN).json({ success: false, message: `${station.toUpperCase()} is already opened by CID ${CurATSUStation.cid}` });
 
       if(CurATSUStation.sectors != sectors) await this.atsuService.updateATSUInformation({ where: { station_code: station.toUpperCase() }, data: { sectors } });
       if(CurATSUStation.approxLoc != approxLoc) await this.atsuService.updateATSUInformation({ where: { station_code: station.toUpperCase() }, data: { approxLoc } });
       await this.agendaService.agenda.cancel({ data: { station_code: station }});
       await this.agendaService.agenda.schedule("in 2 minutes", "logout inactive ATSU", { station_code: station.toUpperCase() });
-      return {
+      return response.status(HttpStatus.OK).json({
         success: true,
         message: `Logged in as ${station.toUpperCase()}`,
         ATSU: CurATSUStation
-      }
+      });
     }
 
     const UserATSUStation = await this.atsuService.ATSUInformation({ cid: ACARSUserData.vatACARSUserData.data.cid });
-    if (UserATSUStation) {
-      await this.atsuService.deleteATSUInformation({ cid: UserATSUStation.cid });
-    }
+    if (UserATSUStation) await this.atsuService.deleteATSUInformation({ cid: UserATSUStation.cid });
 
     await this.agendaService.agenda.schedule("in 2 minutes", "logout inactive ATSU", { station_code: station.toUpperCase() });
-    return {
+    return response.status(HttpStatus.OK).json({
       success: true,
       message: `Logged in as ${station.toUpperCase()}`,
       ATSU: await this.atsuService.createATSUInformation({
@@ -74,7 +92,7 @@ export class AppController {
         approxLoc,
         cid: ACARSUserData.vatACARSUserData.data.cid
       })
-    }
+    });
   }
 
   @Post('/atsu/heartbeat')
