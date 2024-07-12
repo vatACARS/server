@@ -8,6 +8,8 @@ import {
   ApiHideProperty
 } from '@nestjs/swagger';
 
+import type Sector from './types/sector.type';
+
 import { AppService } from './app.service';
 import { AgendaService } from './agenda/agenda.service';
 import { ATSUService } from "./prisma/atsu.service";
@@ -56,10 +58,10 @@ export class AppController {
           schema: {
             type: "object",
             properties: {
-              token: { type: "string", example: "vAcV1-xxxxx" },
-              station: { type: "string", examples: ["YISA", "YSSY", "KZAK"] },
-              sectors: { type: "string", example: [{"name":"ISA","callsign":"BN-ISA_CTR","frequency":125200000}] },
-              approxLoc: { type: "string", example: {"latitude":-19.823415798611112,"longitude":140.916931138883} }
+              token: { type: "string", example: "vAcV1-xxxxx", minLength: 32, maxLength: 32},
+              station: { type: "string", examples: ["YISA", "YSSY", "KZAK"], minLength: 4, maxLength: 4},
+              sectors: { type: "Sector[]", example: [{"name":"ISA","callsign":"BN-ISA_CTR","frequency":125200000}] },
+              approxLoc: { type: "LocationCoordinates", example: {"latitude":-19.823415798611112,"longitude":140.916931138883} }
             },
             required: ["token", "station", "sectors", "approxLoc"]
           }
