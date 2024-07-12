@@ -48,12 +48,33 @@ export class AppController {
   }
 
   @Post('/atsu/logon')
-  @ApiOperation({ summary: "Initiate a connection to vatACARS as a controller.", requestBody: { content: { "application/json": { schema: { type: "object", properties: { token: { type: "string" }, station: { type: "string" }, sectors: { type: "string" }, approxLoc: { type: "string" } }, required: ["token", "station", "sectors", "approxLoc"] } } } } })
-  @ApiResponse({ status: 200, description: "Successfully logged in as ATSU.", type: class ATSUResponse { // Todo: this should be somewhere else
-    success: boolean;
-    message: string;
-    ATSU: ATSUInformationModel
-  } })
+  @ApiOperation({
+    summary: "Initiate a connection to vatACARS as a controller.",
+    requestBody: {
+      content: {
+        "application/json": {
+          schema: {
+            type: "object",
+            properties: {
+              token: { type: "string", example: "vAcV1-xxxxx" },
+              station: { type: "string", examples: ["YISA", "YSSY", "KZAK"] },
+              sectors: { type: "string", example: [{"name":"ISA","callsign":"BN-ISA_CTR","frequency":125200000}] },
+              approxLoc: { type: "string", example: {"latitude":-19.823415798611112,"longitude":140.916931138883} }
+            },
+            required: ["token", "station", "sectors", "approxLoc"]
+          }
+        }
+      }
+    },
+    description: "This endpoint is used to logon as an ATSU controller. It will check if the station is already opened by another controller and if not, it will create a new ATSU controller in the database and reserve the position for 2 minutes."
+  })
+  @ApiResponse({
+    status: 200, description: "Successfully logged in as ATSU.", type: class ATSUResponse { // Todo: this should be somewhere else
+      success: boolean;
+      message: string;
+      ATSU: ATSUInformationModel
+    }
+  })
   @ApiResponse({ status: 400, description: "Invalid station code." })
   @ApiResponse({ status: 401, description: "Not authorised." })
   @ApiResponse({ status: 403, description: "Station already opened by another controller." })
@@ -65,11 +86,11 @@ export class AppController {
 
     const CurATSUStation = await this.atsuService.ATSUInformation({ station_code: station.toUpperCase() });
     if (CurATSUStation) {
-      if(CurATSUStation.cid != ACARSUserData.vatACARSUserData.data.cid) return response.status(HttpStatus.FORBIDDEN).json({ success: false, message: `${station.toUpperCase()} is already opened by CID ${CurATSUStation.cid}` });
+      if (CurATSUStation.cid != ACARSUserData.vatACARSUserData.data.cid) return response.status(HttpStatus.FORBIDDEN).json({ success: false, message: `${station.toUpperCase()} is already opened by CID ${CurATSUStation.cid}` });
 
-      if(CurATSUStation.sectors != sectors) await this.atsuService.updateATSUInformation({ where: { station_code: station.toUpperCase() }, data: { sectors } });
-      if(CurATSUStation.approxLoc != approxLoc) await this.atsuService.updateATSUInformation({ where: { station_code: station.toUpperCase() }, data: { approxLoc } });
-      await this.agendaService.agenda.cancel({ data: { station_code: station }});
+      if (CurATSUStation.sectors != sectors) await this.atsuService.updateATSUInformation({ where: { station_code: station.toUpperCase() }, data: { sectors } });
+      if (CurATSUStation.approxLoc != approxLoc) await this.atsuService.updateATSUInformation({ where: { station_code: station.toUpperCase() }, data: { approxLoc } });
+      await this.agendaService.agenda.cancel({ data: { station_code: station } });
       await this.agendaService.agenda.schedule("in 2 minutes", "logout inactive ATSU", { station_code: station.toUpperCase() });
       return response.status(HttpStatus.OK).json({
         success: true,
@@ -104,11 +125,11 @@ export class AppController {
 
     const CurATSUStation = await this.atsuService.ATSUInformation({ station_code: station.toUpperCase() });
     if (CurATSUStation) {
-      if(CurATSUStation.cid != ACARSUserData.vatACARSUserData.data.cid) return { success: false, message: `${station.toUpperCase()} is already opened by CID ${CurATSUStation.cid}` };
-      if(CurATSUStation.sectors != sectors) await this.atsuService.updateATSUInformation({ where: { station_code: station.toUpperCase() }, data: { sectors } });
-      if(CurATSUStation.approxLoc != approxLoc) await this.atsuService.updateATSUInformation({ where: { station_code: station.toUpperCase() }, data: { approxLoc } });
+      if (CurATSUStation.cid != ACARSUserData.vatACARSUserData.data.cid) return { success: false, message: `${station.toUpperCase()} is already opened by CID ${CurATSUStation.cid}` };
+      if (CurATSUStation.sectors != sectors) await this.atsuService.updateATSUInformation({ where: { station_code: station.toUpperCase() }, data: { sectors } });
+      if (CurATSUStation.approxLoc != approxLoc) await this.atsuService.updateATSUInformation({ where: { station_code: station.toUpperCase() }, data: { approxLoc } });
 
-      await this.agendaService.agenda.cancel({ data: { station_code: station }});
+      await this.agendaService.agenda.cancel({ data: { station_code: station } });
       await this.agendaService.agenda.schedule("in 2 minutes", "logout inactive ATSU", { station_code: station.toUpperCase() });
       return {
         success: true,
