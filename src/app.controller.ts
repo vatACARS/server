@@ -59,7 +59,7 @@ export class AppController {
             type: "object",
             properties: {
               token: { type: "string", example: "vAcV1-xxxxx", minLength: 32, maxLength: 32},
-              station: { type: "string", examples: ["YISA", "YSSY", "KZAK"], minLength: 4, maxLength: 4},
+              station: { type: "string", example: "YISA", minLength: 4, maxLength: 4},
               sectors: { type: "Sector[]", example: [{"name":"ISA","callsign":"BN-ISA_CTR","frequency":125200000}] },
               approxLoc: { type: "LocationCoordinates", example: {"latitude":-19.823415798611112,"longitude":140.916931138883} }
             },
@@ -71,11 +71,16 @@ export class AppController {
     description: "This endpoint is used to logon as an ATSU controller. It will check if the station is already opened by another controller and if not, it will create a new ATSU controller in the database and reserve the position for 2 minutes."
   })
   @ApiResponse({
-    status: 200, description: "Successfully logged in as ATSU.", type: class ATSUResponse { // Todo: this should be somewhere else
-      success: boolean;
-      message: string;
-      ATSU: ATSUInformationModel
-    }
+    status: 200, description: "Successfully logged in as ATSU.", example: {
+      success: true,
+      message: "Logged in as YISA",
+      ATSU: {
+        station_code: "YISA",
+        opened: "2024-01-01T00:00:00.000Z",
+        sectors: [{"name":"ISA","callsign":"BN-ISA_CTR","frequency":125200000}],
+        approxLoc: {"latitude":-19.823415798611112,"longitude":140.916931138883},
+        cid: 123456
+    }}
   })
   @ApiResponse({ status: 400, description: "Invalid station code." })
   @ApiResponse({ status: 401, description: "Not authorised." })
