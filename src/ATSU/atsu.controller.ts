@@ -13,7 +13,7 @@ import { ATSUInformation as ATSUInformationModel } from "@prisma/client";
 
 @Controller()
 @ApiTags("ATSU API")
-export class AppController {
+export class ATSUController {
   constructor(
     private readonly atsuService: ATSUService,
     private readonly agendaService: AgendaService
