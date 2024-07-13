@@ -9,8 +9,6 @@ import {
 } from '@nestjs/swagger';
 
 import { AppService } from './app.service';
-import { AgendaService } from './lib/agenda/agenda.service';
-import { ATSUService } from "./lib/prisma/atsu.service";
 import { ATSUMessageService } from "./lib/prisma/atsuMessage.service";
 import { ATSUMessage as ATSUMessageModel } from "@prisma/client";
 
@@ -19,8 +17,6 @@ import { ATSUMessage as ATSUMessageModel } from "@prisma/client";
 export class AppController {
   constructor(
     private readonly appService: AppService,
-    private readonly agendaService: AgendaService,
-    private readonly atsuService: ATSUService,
     private readonly atsuMessageService: ATSUMessageService
   ) { }
 
