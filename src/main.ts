@@ -19,7 +19,6 @@ async function bootstrap() {
     )
     .setVersion('0.0.2')
     .addTag('vatACARS')
-    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config, { operationIdFactory: (controllerKey: string, methodKey: string) => methodKey });
