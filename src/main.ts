@@ -30,7 +30,7 @@ async function bootstrap() {
     customCss: darkStyle
   });
 
-  await app.listen(8002);
+  await app.listen(process.env.PORT || 3000);
 }
 
 bootstrap();
