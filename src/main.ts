@@ -3,7 +3,6 @@ import { AppModule } from './app.module';
 
 import {
   DocumentBuilder,
-  SwaggerDocumentOptions,
   SwaggerModule,
 } from '@nestjs/swagger';
 
