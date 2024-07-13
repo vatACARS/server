@@ -4,8 +4,7 @@ import { Controller, Get, Post, Patch, Delete, Body, Param, HttpStatus, Res } fr
 import {
   ApiOperation,
   ApiResponse,
-  ApiTags,
-  ApiHideProperty
+  ApiTags
 } from '@nestjs/swagger';
 
 import { AgendaService } from 'src/lib/agenda/agenda.service';
@@ -111,7 +110,8 @@ export class AppController {
         }
       }
     },
-    description: "This endpoint is used to extend the session of an ATSU controller. It will check if the station is already opened by the same controller and if so, it will extend the session for another 3 minutes."
+    deprecated: true,
+    description: "[COMING SOON] This endpoint is used to extend the session of an ATSU controller. It will check if the station is already opened by the same controller and if so, it will extend the session for another 3 minutes."
   })
   @ApiResponse({
     status: 200, description: "Successfully extended the session.", example: {
@@ -151,7 +151,8 @@ export class AppController {
         }
       }
     },
-    description: "This endpoint is used to logout as an ATSU controller. It will check if the station is opened by the same controller and if so, it will delete the ATSU controller from the database."
+    deprecated: true,
+    description: "[COMING SOON] This endpoint is used to logout as an ATSU controller. It will check if the station is opened by the same controller and if so, it will delete the ATSU controller from the database."
   })
   @ApiResponse({
     status: 200, description: "Successfully logged out.", example: {
