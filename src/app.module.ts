@@ -8,6 +8,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AgendaService } from './lib/agenda/agenda.service';
 import { PrismaService } from './lib/prisma/prisma.service';
+import { ATSUService } from './lib/prisma/atsu.service';
 import { ATSUMessageService } from './lib/prisma/atsuMessage.service';
 
 import { DB_URL } from './config';
@@ -22,6 +23,7 @@ import { DB_URL } from './config';
     AppService,
     AgendaService,
     PrismaService,
+    ATSUService,
     ATSUMessageService
   ],
 })
