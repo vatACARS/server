@@ -1,5 +1,5 @@
 import { Response } from 'express';
-import { Controller, Get, Post, Patch, Delete, Body, Param, HttpStatus, Res, Type } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Delete, Body, Param, HttpStatus, Res } from '@nestjs/common';
 
 import {
   ApiOperation,
