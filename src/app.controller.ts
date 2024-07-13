@@ -2,8 +2,6 @@ import { Response } from 'express';
 import { Controller, Get, Param, Res } from '@nestjs/common';
 
 import {
-  ApiOperation,
-  ApiResponse,
   ApiTags,
   ApiHideProperty
 } from '@nestjs/swagger';
