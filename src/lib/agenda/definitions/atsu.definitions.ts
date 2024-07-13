@@ -1,4 +1,4 @@
-import { ATSUService } from 'src/prisma/atsu.service';
+import { ATSUService } from 'src/lib/prisma/atsu.service';
 
 export const defineLogoutInactiveATSU = (agenda, atsuService: ATSUService) => {
     agenda.define("logout inactive ATSU", async job => {

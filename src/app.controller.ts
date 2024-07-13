@@ -8,12 +8,12 @@ import {
   ApiHideProperty
 } from '@nestjs/swagger';
 
-import type Sector from './types/sector.type';
+import type Sector from './lib/types/sector.type';
 
 import { AppService } from './app.service';
-import { AgendaService } from './agenda/agenda.service';
-import { ATSUService } from "./prisma/atsu.service";
-import { ATSUMessageService } from "./prisma/atsuMessage.service";
+import { AgendaService } from './lib/agenda/agenda.service';
+import { ATSUService } from "./lib/prisma/atsu.service";
+import { ATSUMessageService } from "./lib/prisma/atsuMessage.service";
 import { ATSUInformation as ATSUInformationModel, ATSUMessage as ATSUMessageModel } from "@prisma/client";
 
 @Controller()

@@ -1,8 +1,8 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 const Agenda = require("agenda");
 
-import { ATSUService } from 'src/prisma/atsu.service';
-import { ATSUMessageService } from 'src/prisma/atsuMessage.service';
+import { ATSUService } from 'src/lib/prisma/atsu.service';
+import { ATSUMessageService } from 'src/lib/prisma/atsuMessage.service';
 
 import {
     defineLogoutInactiveATSU
