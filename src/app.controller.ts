@@ -12,7 +12,7 @@ import { AppService } from './app.service';
 import { AgendaService } from './lib/agenda/agenda.service';
 import { ATSUService } from "./lib/prisma/atsu.service";
 import { ATSUMessageService } from "./lib/prisma/atsuMessage.service";
-import { ATSUInformation as ATSUInformationModel, ATSUMessage as ATSUMessageModel } from "@prisma/client";
+import { ATSUMessage as ATSUMessageModel } from "@prisma/client";
 
 @Controller()
 @ApiTags("vatACARS")
