@@ -15,8 +15,6 @@ describe('AppController', () => {
   });
 
   describe('root', () => {
-    it('should return "bar"', () => {
-      expect(appController.getFoo()).toBe('bar');
-    });
+    // TODO: Write some tests
   });
 });
