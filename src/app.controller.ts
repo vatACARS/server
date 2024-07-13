@@ -1,5 +1,5 @@
 import { Response } from 'express';
-import { Controller, Get, Post, Body, Param, HttpStatus, Res, Type } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Delete, Body, Param, HttpStatus, Res, Type } from '@nestjs/common';
 
 import {
   ApiOperation,
@@ -59,7 +59,7 @@ export class AppController {
             type: "object",
             properties: {
               token: { type: "string", example: "vAcV1-xxxxx", minLength: 32, maxLength: 32},
-              station: { type: "string", example: "YISA", minLength: 4, maxLength: 4},
+              station: { type: "string", example: "YISA", pattern: "^[A-Z]{4}$" },
               sectors: { type: "Sector[]", example: [{"name":"ISA","callsign":"BN-ISA_CTR","frequency":125200000}] },
               approxLoc: { type: "LocationCoordinates", example: {"latitude":-19.823415798611112,"longitude":140.916931138883} }
             },
@@ -121,6 +121,79 @@ export class AppController {
         cid: ACARSUserData.vatACARSUserData.data.cid
       })
     });
+  }
+
+  @Patch('/atsu/logon')
+  @ApiOperation({
+    summary: "Extend a current ATSU session.",
+    requestBody: {
+      content: {
+        "application/json": {
+          schema: {
+            type: "object",
+            properties: {
+              token: { type: "string", example: "vAcV1-xxxxx", minLength: 32, maxLength: 32},
+              station: { type: "string", example: "YISA", pattern: "^[A-Z]{4}$" }
+            },
+            required: ["token", "station"]
+          }
+        }
+      }
+    },
+    description: "This endpoint is used to extend the session of an ATSU controller. It will check if the station is already opened by the same controller and if so, it will extend the session for another 3 minutes."
+  })
+  @ApiResponse({
+    status: 200, description: "Successfully extended the session.", example: {
+      success: true,
+      message: "Logged in as YISA",
+      ATSU: {
+        station_code: "YISA",
+        opened: "2024-01-01T00:00:00.000Z",
+        sectors: [{"name":"ISA","callsign":"BN-ISA_CTR","frequency":125200000}],
+        approxLoc: {"latitude":-19.823415798611112,"longitude":140.916931138883},
+        cid: 123456
+      }
+    }
+  })
+  @ApiResponse({ status: 400, description: "Invalid station code." })
+  @ApiResponse({ status: 401, description: "Not authorised." })
+  @ApiResponse({ status: 403, description: "Station already opened by another controller." })
+  @ApiResponse({ status: 404, description: "Station not found." })
+  async PatchLogon(@Body() body: any, @Res() response: Response): Promise<Response> {
+    return response.status(HttpStatus.NOT_IMPLEMENTED).json({ success: false, message: "Not implemented" });
+  }
+
+  @Delete('/atsu/logon')
+  @ApiOperation({
+    summary: "Logout as an ATSU controller.",
+    requestBody: {
+      content: {
+        "application/json": {
+          schema: {
+            type: "object",
+            properties: {
+              token: { type: "string", example: "vAcV1-xxxxx", minLength: 32, maxLength: 32},
+              station: { type: "string", example: "YISA", pattern: "^[A-Z]{4}$" }
+            },
+            required: ["token", "station"]
+          }
+        }
+      }
+    },
+    description: "This endpoint is used to logout as an ATSU controller. It will check if the station is opened by the same controller and if so, it will delete the ATSU controller from the database."
+  })
+  @ApiResponse({
+    status: 200, description: "Successfully logged out.", example: {
+      success: true,
+      message: "Logged out from YISA"
+    }
+  })
+  @ApiResponse({ status: 400, description: "Invalid station code." })
+  @ApiResponse({ status: 401, description: "Not authorised." })
+  @ApiResponse({ status: 403, description: "Station opened by another controller." })
+  @ApiResponse({ status: 404, description: "Station not found." })
+  async deleteLogon(@Body() body: any, @Res() response: Response): Promise<Response> {
+    return response.status(HttpStatus.NOT_IMPLEMENTED).json({ success: false, message: "Not implemented" });
   }
 
   @Post('/atsu/heartbeat')
