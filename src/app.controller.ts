@@ -3,7 +3,7 @@ import { Controller, Get, Param, Res } from '@nestjs/common';
 
 import {
   ApiTags,
-  ApiHideProperty
+  ApiHideProperty,
 } from '@nestjs/swagger';
 
 import { AppService } from './app.service';
