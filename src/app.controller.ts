@@ -57,7 +57,7 @@ export class AppController {
     if (!ACARSUserData.success) return response.status(HttpStatus.UNAUTHORIZED).json({ success: false, message: "Not authorised" });
     if(!["plugin"].includes(source)) return response.status(400).json({ success: false, message: "Invalid source" });
 
-    const { ident, raw } = data;
+    const { ident, raw } = JSON.parse(data);
     if(!ident || !raw) return response.status(400).json({ success: false, message: "Missing data" });
 
     this.appService.reportIssue(ACARSUserData.vatACARSUserData.data.cid, source, data);
