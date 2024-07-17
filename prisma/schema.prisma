@@ -30,3 +30,12 @@ model ATSUMessage {
   relayed_time      DateTime
   ATSUInformation   ATSUInformation   @relation(fields: [station], references: [id])
 }
+
+model ErrorReport {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  cid       String
+  source    String
+  ident     String
+  raw       String
+  processed Boolean @default(false)
+}
