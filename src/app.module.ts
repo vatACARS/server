@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ThrottlerModule } from '@nestjs/throttler';
 
 import { ATSUModule } from './ATSU/atsu.module';
 
@@ -15,6 +16,10 @@ import { DB_URL } from './config';
 
 @Module({
   imports: [
+    ThrottlerModule.forRoot([{
+      ttl: 60000,
+      limit: 10,
+    }]),
     MongooseModule.forRoot(DB_URL),
     ATSUModule
   ],
