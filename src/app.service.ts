@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
+prisma.$connect();
 
 @Injectable()
 export class AppService {
@@ -85,7 +86,7 @@ export class AppService {
   }
 
   reportIssue(cid: string, source: string, data: { ident: string, raw: string }): void {
-    // Use prisma to store the data
+    console.log(`Reporting issue for CID ${cid} from ${source}`);
     prisma.errorReport.create({
       data: {
         cid,
