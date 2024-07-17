@@ -94,6 +94,6 @@ export class AppService {
         ident: data.ident,
         raw: data.raw
       }
-    });
+    }).catch(err => console.error(err));
   }
 }
