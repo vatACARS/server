@@ -86,7 +86,7 @@ export class AppService {
   }
 
   reportIssue(cid: string, source: string, data: { ident: string, raw: string }): void {
-    console.log(`Reporting issue for CID ${cid} from ${source}`);
+    console.log(`Reporting issue for CID ${cid} from ${source}: ${data.ident}\n${data.raw}`);
     prisma.errorReport.create({
       data: {
         cid,
