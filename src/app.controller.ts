@@ -60,7 +60,7 @@ export class AppController {
     const { ident, raw } = JSON.parse(data);
     if(!ident || !raw) return response.status(400).json({ success: false, message: "Missing data" });
 
-    this.appService.reportIssue(ACARSUserData.vatACARSUserData.data.cid, source, data);
+    this.appService.reportIssue(ACARSUserData.vatACARSUserData.data.cid, source, JSON.parse(data));
     return response.status(200).json({ success: true });
   }
 }
