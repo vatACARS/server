@@ -1,22 +1,27 @@
 import { Response } from 'express';
-import { Controller, Get, Post, Body, Param, Query, Res } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Res, HttpStatus } from '@nestjs/common';
+
+import {
+  ApiTags,
+  ApiHideProperty,
+} from '@nestjs/swagger';
+
 import { AppService } from './app.service';
+import { ATSUMessageService } from "./lib/prisma/atsuMessage.service";
+import { ATSUMessage as ATSUMessageModel } from "@prisma/client";
+import { SkipThrottle, Throttle } from '@nestjs/throttler';
 
-import { AgendaService } from './agenda/agenda.service';
-import { ATSUService } from "./prisma/atsu.service";
-import { ATSUMessageService } from "./prisma/atsuMessage.service";
-import { ATSUInformation as ATSUInformationModel, ATSUMessage as ATSUMessageModel } from "@prisma/client";
-
+@SkipThrottle()
 @Controller()
+@ApiTags("vatACARS")
 export class AppController {
   constructor(
     private readonly appService: AppService,
-    private readonly agendaService: AgendaService,
-    private readonly atsuService: ATSUService,
     private readonly atsuMessageService: ATSUMessageService
   ) { }
 
   @Get('/hub/dist/:file')
+  @ApiHideProperty()
   getUpdateChannel(@Param() params: { file: string }, @Res() res: Response) {
     res.redirect(`https://dist.vatacars.com/releases/${this.appService.getLatestHubVersion()}/${params.file}`)
   }
@@ -27,91 +32,35 @@ export class AppController {
   }
 
   @Get('/repository')
+  @ApiHideProperty()
   getRepository(): object {
     return this.appService.getRepository();
   }
 
   @Get('/hub/clientInformation')
+  @ApiHideProperty()
   getAvailableClients(): object {
     return this.appService.getAvailableClients();
-  }
-
-  @Post('/atsu/logon')
-  async postLogon(@Body() body: any): Promise<{ success: boolean, message: string, ATSU: ATSUInformationModel } | { success: false, message: string }> {
-    const { token, station, sectors, approxLoc } = body;
-    if (station.length != 4) return { success: false, message: "Invalid station code" };
-    const ACARSUserData = await fetch(`https://vatacars.com/api/client/me?token=${token}`).then(resp => resp.json());
-    if (!ACARSUserData.success) return { success: false, message: "Not authorised" };
-
-    const CurATSUStation = await this.atsuService.ATSUInformation({ station_code: station.toUpperCase() });
-    if (CurATSUStation) {
-      if(CurATSUStation.cid != ACARSUserData.vatACARSUserData.data.cid) return { success: false, message: `${station.toUpperCase()} is already opened by CID ${CurATSUStation.cid}` };
-
-      if(CurATSUStation.sectors != sectors) await this.atsuService.updateATSUInformation({ where: { station_code: station.toUpperCase() }, data: { sectors } });
-      if(CurATSUStation.approxLoc != approxLoc) await this.atsuService.updateATSUInformation({ where: { station_code: station.toUpperCase() }, data: { approxLoc } });
-      await this.agendaService.agenda.cancel({ data: { station_code: station }});
-      await this.agendaService.agenda.schedule("in 2 minutes", "logout inactive ATSU", { station_code: station.toUpperCase() });
-      return {
-        success: true,
-        message: `Logged in as ${station.toUpperCase()}`,
-        ATSU: CurATSUStation
-      }
-    }
-
-    const UserATSUStation = await this.atsuService.ATSUInformation({ cid: ACARSUserData.vatACARSUserData.data.cid });
-    if (UserATSUStation) {
-      await this.atsuService.deleteATSUInformation({ cid: UserATSUStation.cid });
-    }
-
-    await this.agendaService.agenda.schedule("in 2 minutes", "logout inactive ATSU", { station_code: station.toUpperCase() });
-    return {
-      success: true,
-      message: `Logged in as ${station.toUpperCase()}`,
-      ATSU: await this.atsuService.createATSUInformation({
-        station_code: station.toUpperCase(),
-        opened: new Date(),
-        sectors,
-        approxLoc,
-        cid: ACARSUserData.vatACARSUserData.data.cid
-      })
-    }
-  }
-
-  @Post('/atsu/heartbeat')
-  async postHeartbeat(@Body() body: any): Promise<{ success: boolean, message: string, ATSU: ATSUInformationModel } | { success: false, message: string }> {
-    const { token, station, sectors, approxLoc } = body;
-    if (station.length != 4) return { success: false, message: "Invalid station code" };
-    const ACARSUserData = await fetch(`https://vatacars.com/api/client/me?token=${token}`).then(resp => resp.json());
-    if (!ACARSUserData.success) return { success: false, message: "Not authorised" };
-
-    const CurATSUStation = await this.atsuService.ATSUInformation({ station_code: station.toUpperCase() });
-    if (CurATSUStation) {
-      if(CurATSUStation.cid != ACARSUserData.vatACARSUserData.data.cid) return { success: false, message: `${station.toUpperCase()} is already opened by CID ${CurATSUStation.cid}` };
-      if(CurATSUStation.sectors != sectors) await this.atsuService.updateATSUInformation({ where: { station_code: station.toUpperCase() }, data: { sectors } });
-      if(CurATSUStation.approxLoc != approxLoc) await this.atsuService.updateATSUInformation({ where: { station_code: station.toUpperCase() }, data: { approxLoc } });
-
-      await this.agendaService.agenda.cancel({ data: { station_code: station }});
-      await this.agendaService.agenda.schedule("in 2 minutes", "logout inactive ATSU", { station_code: station.toUpperCase() });
-      return {
-        success: true,
-        message: `Logged in as ${station.toUpperCase()}`,
-        ATSU: CurATSUStation
-      }
-    }
-
-    return {
-      success: false,
-      message: `Can't find active station: ${station}`
-    }
-  }
-
-  @Get('/atsu/online')
-  async getATSUOnline(): Promise<ATSUInformationModel[]> {
-    return this.atsuService.ATSUInformationCollection({});
   }
 
   @Get('/atsu/poll/:station')
   async getMessages(@Param("station") station: string): Promise<ATSUMessageModel[]> {
     return this.atsuMessageService.ATSUMessageCollection({ where: { station } });
+  }
+
+  @Throttle({ default: { limit: 3, ttl: 60000 } })
+  @Post('/reporting')
+  async postReport(@Body() body: any, @Res() response: Response): Promise<Response> {
+    const { token, source, data } = body;
+    if (!token || !source || !data) return response.status(400).json({ success: false, message: "Missing data" });
+    const ACARSUserData = await fetch(`https://vatacars.com/api/client/me?token=${token}`).then(resp => resp.json());
+    if (!ACARSUserData.success) return response.status(HttpStatus.UNAUTHORIZED).json({ success: false, message: "Not authorised" });
+    if(!["plugin"].includes(source)) return response.status(400).json({ success: false, message: "Invalid source" });
+
+    const { ident, raw } = JSON.parse(data);
+    if(!ident || !raw) return response.status(400).json({ success: false, message: "Missing data" });
+
+    this.appService.reportIssue(ACARSUserData.vatACARSUserData.data.cid, source, JSON.parse(data));
+    return response.status(200).json({ success: true });
   }
 }
