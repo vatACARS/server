@@ -13,9 +13,9 @@ export class AppService {
 
   getLatestVersion(): object {
     return {
-      version: '1.0.2',
-      changes: ["Fixed PDC crashes", "Fixed quickResponse crashes", "Misc bug fixes", "QOL improvements"],
-      releaseDateTime: '2024-07-05T12:47:20.307Z',
+      version: '1.0.3',
+      changes: ["Added basic ADS-C support", "Several crashes fixed", "Added auto crash reporting", "And much more..."],
+      releaseDateTime: '2024-07-18T01:20:25.723Z',
     };
   }
 
@@ -23,23 +23,29 @@ export class AppService {
     return [{
       name: "Controller Plugin",
       bgImageUrl: "https://images.unsplash.com/photo-1646768843273-4dbb7a174a4d?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      latestVersion: "1.0.2",
+      latestVersion: "1.0.3",
       description: "The vatACARS plugin for vatSys is a purpose-built CPDLC interface that helps streamline a controller's workflow. It connects directly with Hoppies ACARS, allowing controllers to easily link up with pilots using our pilot client or various other available options.",
       latestChangelog: [{
           logType: 1,
-          label: "Fixed crashes caused by aircraft requesting PDCs with no FDR"
+          label: "Added ADS-C support"
       }, {
-          logType: 1,
-          label: "Fixed crashes caused by quick response placeholder messages loading incorrectly"
+        logType: 1,
+        label: "Fixed several causes for crashes"
       }, {
-          logType: 3,
-          label: "Other miscellaneous bug fixes"
+        logType: 1,
+        label: "Added automatic crash reporting"
       }, {
-          logType: 3,
-          label: "QOL improvements"
+        logType: 1,
+        label: "Improved PDC construction functionality"
+      }, {
+        logType: 1,
+        label: "Improved quickfill placeholder logic"
+      }, {
+        logType: 3,
+        label: "And much more..."
       }],
       availableDownloads: [{
-          version: "1.0.2",
+          version: "1.0.3",
           label: "Early Access"
       }],
       selectedDownload: 0,
