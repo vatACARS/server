@@ -13,7 +13,7 @@ export class AppService {
 
   getLatestVersion(): object {
     return {
-      version: '1.0.4.1',
+      version: '1.0.5',
       changes: ["Hotfix: fixed HoppiesInterface parser"],
       releaseDateTime: '2024-07-23T09:01:16.491Z',
     };
