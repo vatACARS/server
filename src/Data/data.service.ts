@@ -12,7 +12,7 @@ export class DataService {
     @Cron('0 * * * * *') // Runs every minute
     async fetchNetworkData() {
         try {
-            const response = await fetch("https://api.vatacars.com/data/network", {
+            const response = await fetch("https://vatsim-radar.com/api/data/vatsim/data", {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
