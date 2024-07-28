@@ -13,8 +13,14 @@ export class DataService {
     @Cron('0 * * * * *') // Runs every minute
     async fetchNetworkData() {
         try {
-            const response = await axios.get('https://vatsim-radar.com/api/data/vatsim/data', { headers: { "Content-Type": "application/json" } });
-            this.networkData = response.data;
+            const response = await fetch("https://api.vatacars.com/data/network", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            }).then(resp => resp.json());
+
+            this.networkData = response;
         } catch (error) {
             console.error('Error fetching network data:', error);
         }
