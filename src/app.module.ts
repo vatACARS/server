@@ -3,6 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ThrottlerModule } from '@nestjs/throttler';
 
 import { ATSUModule } from './ATSU/atsu.module';
+import { DataModule } from './Data/data.module';
 
 import { AppController } from './app.controller';
 
@@ -11,6 +12,7 @@ import { AgendaService } from './lib/agenda/agenda.service';
 import { PrismaService } from './lib/prisma/prisma.service';
 import { ATSUService } from './lib/prisma/atsu.service';
 import { ATSUMessageService } from './lib/prisma/atsuMessage.service';
+import { DataService } from './Data/data.service';
 
 import { DB_URL } from './config';
 
@@ -21,7 +23,8 @@ import { DB_URL } from './config';
       limit: 10,
     }]),
     MongooseModule.forRoot(DB_URL),
-    ATSUModule
+    ATSUModule,
+    DataModule
   ],
   controllers: [AppController],
   providers: [
@@ -29,7 +32,8 @@ import { DB_URL } from './config';
     AgendaService,
     PrismaService,
     ATSUService,
-    ATSUMessageService
+    ATSUMessageService,
+    DataService
   ],
 })
 export class AppModule {}
