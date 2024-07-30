@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { ScheduleModule } from '@nestjs/schedule';
 
 import { ATSUModule } from './ATSU/atsu.module';
 import { DataModule } from './Data/data.module';
@@ -23,6 +24,7 @@ import { DB_URL } from './config';
       limit: 10,
     }]),
     MongooseModule.forRoot(DB_URL),
+    ScheduleModule.forRoot(),
     ATSUModule,
     DataModule
   ],
