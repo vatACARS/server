@@ -68,7 +68,7 @@ export class ATSUController {
       if (CurATSUStation.sectors != sectors) await this.atsuService.updateATSUInformation({ where: { station_code: station.toUpperCase() }, data: { sectors } });
       if (CurATSUStation.approxLoc != approxLoc) await this.atsuService.updateATSUInformation({ where: { station_code: station.toUpperCase() }, data: { approxLoc } });
       await this.agendaService.agenda.cancel({ data: { station_code: station } });
-      await this.agendaService.agenda.schedule("in 2 minutes", "logout inactive ATSU", { station_code: station.toUpperCase() });
+      await this.agendaService.agenda.schedule("in 3 minutes", "logout inactive ATSU", { station_code: station.toUpperCase() });
       return response.status(HttpStatus.OK).json({
         success: true,
         message: `Logged in as ${station.toUpperCase()}`,
@@ -79,7 +79,7 @@ export class ATSUController {
     const UserATSUStation = await this.atsuService.ATSUInformation({ cid: ACARSUserData.vatACARSUserData.data.cid });
     if (UserATSUStation) await this.atsuService.deleteATSUInformation({ cid: UserATSUStation.cid });
 
-    await this.agendaService.agenda.schedule("in 2 minutes", "logout inactive ATSU", { station_code: station.toUpperCase() });
+    await this.agendaService.agenda.schedule("in 3 minutes", "logout inactive ATSU", { station_code: station.toUpperCase() });
     return response.status(HttpStatus.OK).json({
       success: true,
       message: `Logged in as ${station.toUpperCase()}`,
@@ -182,7 +182,7 @@ export class ATSUController {
       if (CurATSUStation.approxLoc != approxLoc) await this.atsuService.updateATSUInformation({ where: { station_code: station.toUpperCase() }, data: { approxLoc } });
 
       await this.agendaService.agenda.cancel({ data: { station_code: station } });
-      await this.agendaService.agenda.schedule("in 2 minutes", "logout inactive ATSU", { station_code: station.toUpperCase() });
+      await this.agendaService.agenda.schedule("in 3 minutes", "logout inactive ATSU", { station_code: station.toUpperCase() });
       return {
         success: true,
         message: `Logged in as ${station.toUpperCase()}`,
