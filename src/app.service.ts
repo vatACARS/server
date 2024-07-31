@@ -13,9 +13,9 @@ export class AppService {
 
   getLatestVersion(): object {
     return {
-      version: '1.0.5',
-      changes: ["Hotfix: fixed HoppiesInterface parser"],
-      releaseDateTime: '2024-07-23T09:01:16.491Z',
+      version: '1.0.6',
+      changes: ["Fixed visual issues in dispatch window", "Added escape, restore, suspend functionality to editor window", "Fixed networking code for interactions with vatACARS server", "Improved PDC logic", "Added several QOL improvements", "Improved stability and performance"],
+      releaseDateTime: '2024-07-31T09:38:28.792Z',
     };
   }
 
@@ -23,14 +23,29 @@ export class AppService {
     return [{
       name: "Controller Plugin",
       bgImageUrl: "https://images.unsplash.com/photo-1646768843273-4dbb7a174a4d?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      latestVersion: "1.0.5",
+      latestVersion: "1.0.6",
       description: "The vatACARS plugin for vatSys is a purpose-built CPDLC interface that helps streamline a controller's workflow. It connects directly with Hoppies ACARS, allowing controllers to easily link up with pilots using our pilot client or various other available options.",
       latestChangelog: [{
+        logType: 1,
+        label: "Fixed visual issues in dispatch window"
+      }, {
+        logType: 1,
+        label: "Added escape, restore, suspend functionality to editor window"
+      }, {
+        logType: 1,
+        label: "Fixed networking code for interactions with vatACARS server"
+      }, {
         logType: 3,
-        label: "Hotfix: fixed HoppiesInterface parser issue"
+        label: "Improved PDC logic"
+      }, {
+        logType: 3,
+        label: "Added several QOL improvements"
+      }, {
+        logType: 3,
+        label: "Improved stability and performance"
       }],
       availableDownloads: [{
-          version: "1.0.5",
+          version: "1.0.6",
           label: "Early Access"
       }],
       selectedDownload: 0,
@@ -65,7 +80,7 @@ export class AppService {
         fileName: 'uplinks.xml',
         location: 'hub/data',
         subFolder: 'data',
-        hash: '37faeaa9a09fb28d3d677a99b72addd6',
+        hash: 'b5924ec8c997ebb9abe4d5b5f1f80a52',
       },
       {
         fileName: 'quickfill.json',
