@@ -1,0 +1,29 @@
+name: CI
+
+env:
+  resourceGroup: "vatacars-server-dev_group"
+  kubernetesVersion: "1.29.7"
+  name: "vatacars-server"
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Azure Login
+        uses: Azure/login@v2.1.0
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Azure CLI Action
+        uses: Azure/cli@v2.0.0
+        with:
+          inlineScript: az aks create -g ${{ env.resourceGroup }} -n ${{ env.name }} --kubernetes-version ${{ env.kubernetesVersion }} --generate-ssh-keys 
