@@ -1,5 +1,5 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
-const Agenda = require('agenda');
+import Agenda = require('agenda');
 
 import { ATSUService } from 'src/lib/prisma/atsu.service';
 import { ATSUMessageService } from 'src/lib/prisma/atsuMessage.service';
@@ -16,7 +16,7 @@ export class AgendaService implements OnModuleInit {
     private readonly atsuService: ATSUService,
     private readonly atsuMessageService: ATSUMessageService,
   ) {
-    this.agenda = new Agenda({
+    this.agenda = new Agenda.Agenda({
       db: { address: process.env.database_url, collection: 'tasks' },
     });
     this.agenda.start();
