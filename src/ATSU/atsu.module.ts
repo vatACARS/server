@@ -7,13 +7,8 @@ import { AgendaService } from 'src/lib/agenda/agenda.service';
 import { PrismaService } from 'src/lib/prisma/prisma.service';
 
 @Module({
-    imports: [],
-    controllers: [ATSUController],
-    providers: [
-        AgendaService,
-        PrismaService,
-        ATSUService,
-        ATSUMessageService
-    ],
+  imports: [],
+  controllers: [ATSUController],
+  providers: [AgendaService, PrismaService, ATSUService, ATSUMessageService],
 })
 export class ATSUModule {}

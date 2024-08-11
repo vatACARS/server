@@ -4,14 +4,12 @@ import { ApiTags } from '@nestjs/swagger';
 import { DataService } from './data.service';
 
 @Controller()
-@ApiTags("Data API")
+@ApiTags('Data API')
 export class DataController {
-    constructor(
-        private readonly dataService: DataService,
-    ) {}
+  constructor(private readonly dataService: DataService) {}
 
-    @Get('/data/network')
-    getNetworkData(): object {
-        return this.dataService.getNetworkData();
-    }
+  @Get('/data/network')
+  getNetworkData(): object {
+    return this.dataService.getNetworkData();
+  }
 }

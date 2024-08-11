@@ -2,9 +2,7 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { ScheduleModule } from '@nestjs/schedule';
-
-import { ATSUModule } from './ATSU/atsu.module';
-import { DataModule } from './Data/data.module';
+import { SentryModule } from '@sentry/nestjs/setup';
 
 import { AppController } from './app.controller';
 
@@ -19,14 +17,15 @@ import { DB_URL } from './config';
 
 @Module({
   imports: [
-    ThrottlerModule.forRoot([{
-      ttl: 60000,
-      limit: 10,
-    }]),
+    SentryModule.forRoot(),
+    ThrottlerModule.forRoot([
+      {
+        ttl: 60000,
+        limit: 10,
+      },
+    ]),
     MongooseModule.forRoot(DB_URL),
     ScheduleModule.forRoot(),
-    ATSUModule,
-    DataModule
   ],
   controllers: [AppController],
   providers: [
@@ -35,7 +34,7 @@ import { DB_URL } from './config';
     PrismaService,
     ATSUService,
     ATSUMessageService,
-    DataService
+    DataService,
   ],
 })
 export class AppModule {}
