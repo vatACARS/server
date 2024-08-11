@@ -13,3 +13,18 @@ services:
     volumes:
       - .:/app:delegated
       - /app/node_modules
+  
+  api-prod:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: builder
+    working_dir: /app
+    ports:
+      - 8002:8002
+    command: [sh, -c, "npm run prime && npm run build && npm start"]
+    env_file:
+      - .env
+    volumes:
+      - .:/app:delegated
+      - /app/node_modules
