@@ -18,12 +18,10 @@ import { DB_URL } from './config';
 @Module({
   imports: [
     SentryModule.forRoot(),
-    ThrottlerModule.forRoot([
-      {
-        ttl: 60000,
-        limit: 10,
-      },
-    ]),
+    ThrottlerModule.forRoot([{
+      ttl: 60000,
+      limit: 10,
+    }]),
     MongooseModule.forRoot(DB_URL),
     ScheduleModule.forRoot(),
   ],
@@ -34,7 +32,7 @@ import { DB_URL } from './config';
     PrismaService,
     ATSUService,
     ATSUMessageService,
-    DataService,
+    DataService
   ],
 })
 export class AppModule {}

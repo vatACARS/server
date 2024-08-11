@@ -6,7 +6,6 @@ import {
   Patch,
   Delete,
   Body,
-  Param,
   HttpStatus,
   Res,
 } from '@nestjs/common';
