@@ -4,6 +4,9 @@ import { ThrottlerModule } from '@nestjs/throttler';
 import { ScheduleModule } from '@nestjs/schedule';
 import { SentryModule } from '@sentry/nestjs/setup';
 
+import { ATSUModule } from './ATSU/atsu.module';
+import { DataModule } from './Data/data.module';
+
 import { AppController } from './app.controller';
 
 import { AppService } from './app.service';
@@ -26,6 +29,9 @@ import { DB_URL } from './config';
     ]),
     MongooseModule.forRoot(DB_URL),
     ScheduleModule.forRoot(),
+
+    ATSUModule,
+    DataModule
   ],
   controllers: [AppController],
   providers: [
