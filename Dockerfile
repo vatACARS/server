@@ -1,11 +1,11 @@
-ARG IMAGE=node:20.16-alpine
+FROM node:19
+ENV PORT 8002
+EXPOSE 8002
 
-#COMMON
-FROM $IMAGE AS builder
-WORKDIR /app
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+COPY package.json .
+RUN npm install
 COPY . .
-RUN npm i
 
-#DEV
-FROM builder AS dev
-CMD [""]
+CMD ["npm", "start"]
