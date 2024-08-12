@@ -8,7 +8,14 @@ spec:
     configMapName: configmap-created-by-appconfig-provider
     configMapData: 
       type: json
-      key: mysettings.json
+      key: azureProvided.json
+  configuration:
+    refresh:
+      enabled: true
+      interval: 1m
+      monitoring:
+        keyValues:
+          - key: database_url
   auth:
     workloadIdentity:
       managedIdentityClientId: 626bd52d-c976-4104-ac3c-046e0d3f8adf
