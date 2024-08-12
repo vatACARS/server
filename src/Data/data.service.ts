@@ -1,8 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 
-import fetch from 'node-fetch';
-
 @Injectable()
 export class DataService {
   private networkData: any = {};
