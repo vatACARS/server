@@ -20,5 +20,15 @@ spec:
         - name: server
           image: acrworkflow1723348464474.azurecr.io/image-workflow-1723348464474:latest
           imagePullPolicy: Always
+          volumeMounts:
+            - name: config-volume
+              mountPath: /app/config
+          env:
+            - name: config_file
+              value: /app/config/azureProvided.json
           ports:
-            - containerPort: 8002
+            - containerPort: 80
+      volumes:
+        - name: config-volume 
+          configMap: 
+            name: configmap-created-by-appconfig-provider
