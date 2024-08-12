@@ -1,0 +1,19 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: vatacarsserverprod 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vatacarsserverprod
+  template:
+    metadata:
+      labels:
+        app: vatacarsserverprod 
+    spec:
+      containers:
+        - name: vatacarsserverprod 
+          image: vatacars.azurecr.io/vatacarsserverprod
+          ports:
+          - containerPort: 8002
