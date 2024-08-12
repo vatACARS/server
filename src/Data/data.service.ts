@@ -13,19 +13,18 @@ export class DataService {
 
   @Cron('0 * * * * *') // Runs every minute
   async fetchNetworkData() {
-    const response = await fetch(
-      'https://vatsim-radar.com/api/data/vatsim/data',
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      },
-    )
-      .then((resp) => resp.json())
-      .catch((err) => new Error(err));
+    try {
+      const response = await fetch("https://vatsim-radar.com/api/data/vatsim/data", {
+          method: "GET",
+          headers: {
+              "Content-Type": "application/json",
+          }
+      }).then(resp => resp.json());
 
-    this.networkData = response;
+      this.networkData = response;
+    } catch (error) {
+        console.error('Error fetching network data:', error);
+    }
   }
 
   getNetworkData() {
