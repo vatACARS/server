@@ -3,7 +3,7 @@ kind: AzureAppConfigurationProvider
 metadata:
   name: appconfigurationprovider-sample
 spec:
-  endpoint: https://aks-config.azconfig.io
+  endpoint: https://vacars-config.azconfig.io
   target:
     configMapName: configmap-created-by-appconfig-provider
     configMapData: 
@@ -18,4 +18,4 @@ spec:
           - key: database_url
   auth:
     workloadIdentity:
-      managedIdentityClientId: 626bd52d-c976-4104-ac3c-046e0d3f8adf
+      managedIdentityClientId: 329feccf-8003-4b7b-9b46-78f3d59de407

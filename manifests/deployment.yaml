@@ -27,7 +27,7 @@ spec:
             - name: config_file
               value: /app/config/azureProvided.json
           ports:
-            - containerPort: 80
+            - containerPort: 8002
       volumes:
         - name: config-volume 
           configMap: 
