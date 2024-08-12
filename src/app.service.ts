@@ -13,16 +13,13 @@ export class AppService {
 
   getLatestVersion(): object {
     return {
-      version: '1.0.6',
+      version: '1.1.0',
       changes: [
-        'Fixed visual issues in dispatch window',
-        'Added escape, restore, suspend functionality to editor window',
-        'Fixed networking code for interactions with vatACARS server',
-        'Improved PDC logic',
-        'Added several QOL improvements',
-        'Improved stability and performance',
+        'Extended editor window functionality',
+        'Added a history window and overhauled the quickfill window',
+        'Extensive bug fixes and performance improvements',
       ],
-      releaseDateTime: '2024-07-31T09:38:28.792Z',
+      releaseDateTime: '2024-08-12T07:55:59.803Z',
     };
   }
 
@@ -32,41 +29,43 @@ export class AppService {
         name: 'Controller Plugin',
         bgImageUrl:
           'https://images.unsplash.com/photo-1646768843273-4dbb7a174a4d?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-        latestVersion: '1.0.6',
+        latestVersion: '1.1.0',
         description:
           "The vatACARS plugin for vatSys is a purpose-built CPDLC interface that helps streamline a controller's workflow. It connects directly with Hoppies ACARS, allowing controllers to easily link up with pilots using our pilot client or various other available options.",
         latestChangelog: [
           {
             logType: 1,
-            label: 'Fixed visual issues in dispatch window',
+            label: 'Extended & overhauled Editor Window and Quickfill Window functionality.',
           },
           {
             logType: 1,
-            label:
-              'Added escape, restore, suspend functionality to editor window',
+            label: 'Added a history window to view expired transceiver messages.',
           },
           {
             logType: 1,
-            label:
-              'Fixed networking code for interactions with vatACARS server',
+            label: 'Introduced "intents" to automatically update strips based on CPDLC messages.',
+          },
+          {
+            logType: 1,
+            label: 'Added mousescroll support to all windows containing a scrollbar.'
           },
           {
             logType: 3,
-            label: 'Improved PDC logic',
+            label: 'Resolved connection issues and improved overall stability.',
           },
           {
             logType: 3,
-            label: 'Added several QOL improvements',
+            label: 'Resolved several crashes caused by unexpected user input.',
           },
           {
             logType: 3,
-            label: 'Improved stability and performance',
+            label: 'Extensive bug fixes and performance improvements.',
           },
         ],
         availableDownloads: [
           {
-            version: '1.0.6',
-            label: 'Early Access',
+            version: '1.1.0',
+            label: 'Stable',
           },
         ],
         selectedDownload: 0,
