@@ -2,14 +2,9 @@ apiVersion: v1
 kind: Service
 metadata:
   name: server
-  namespace: namespace-workflow-1723348464474
-  labels:
-    kubernetes.azure.com/generator: devhub
 spec:
   type: LoadBalancer
-  selector:
-    app: server
   ports:
     - protocol: TCP
       port: 80
-      targetPort: 80
+      targetPort: 8002
