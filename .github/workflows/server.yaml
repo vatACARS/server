@@ -5,14 +5,15 @@ name: server
             - master
     workflow_dispatch: {}
 env:
-    ACR_RESOURCE_GROUP: vatacars-server-dev_group
-    AZURE_CONTAINER_REGISTRY: acrworkflow1723348464474
-    CLUSTER_NAME: vatacars-server
-    CLUSTER_RESOURCE_GROUP: vatacars-server-dev_group
-    CONTAINER_NAME: image-workflow-1723348464474
+    ACR_RESOURCE_GROUP: vacars_kube-seaus-prod_infrastructure
+    AZURE_CONTAINER_REGISTRY: vatacars
+    CLUSTER_NAME: vacars_kube-seaus-prod
+    CLUSTER_RESOURCE_GROUP: vatACARS-Server
+    CONTAINER_NAME: vatacarsserverprod
     DEPLOYMENT_MANIFEST_PATH: |
         manifests/deployment.yaml
         manifests/service.yaml
+        manifests/appConfigurationProvider.yaml
 jobs:
     buildImage:
         permissions:
