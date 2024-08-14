@@ -13,13 +13,11 @@ export class AppService {
 
   getLatestVersion(): object {
     return {
-      version: '1.1.0',
+      version: '1.1.1',
       changes: [
-        'Extended editor window functionality',
-        'Added a history window and overhauled the quickfill window',
-        'Extensive bug fixes and performance improvements',
+        'Fixed a crash related to vatSys controls update',
       ],
-      releaseDateTime: '2024-08-12T07:55:59.803Z',
+      releaseDateTime: '2024-08-14T08:59:45.831Z',
     };
   }
 
@@ -29,42 +27,18 @@ export class AppService {
         name: 'Controller Plugin',
         bgImageUrl:
           'https://images.unsplash.com/photo-1646768843273-4dbb7a174a4d?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-        latestVersion: '1.1.0',
+        latestVersion: '1.1.1',
         description:
           "The vatACARS plugin for vatSys is a purpose-built CPDLC interface that helps streamline a controller's workflow. It connects directly with Hoppies ACARS, allowing controllers to easily link up with pilots using our pilot client or various other available options.",
         latestChangelog: [
           {
             logType: 1,
-            label: 'Extended & overhauled Editor Window and Quickfill Window functionality.',
-          },
-          {
-            logType: 1,
-            label: 'Added a history window to view expired transceiver messages.',
-          },
-          {
-            logType: 1,
-            label: 'Introduced "intents" to automatically update strips based on CPDLC messages.',
-          },
-          {
-            logType: 1,
-            label: 'Added mousescroll support to all windows containing a scrollbar.'
-          },
-          {
-            logType: 3,
-            label: 'Resolved connection issues and improved overall stability.',
-          },
-          {
-            logType: 3,
-            label: 'Resolved several crashes caused by unexpected user input.',
-          },
-          {
-            logType: 3,
-            label: 'Extensive bug fixes and performance improvements.',
-          },
+            label: 'Fixed a crash related to vatSys controls update',
+          }
         ],
         availableDownloads: [
           {
-            version: '1.1.0',
+            version: '1.1.1',
             label: 'Stable',
           },
         ],
