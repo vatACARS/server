@@ -13,11 +13,13 @@ export class AppService {
 
   getLatestVersion(): object {
     return {
-      version: '1.1.1',
+      version: '1.1.2',
       changes: [
-        'Fixed a crash related to vatSys controls update',
+        'Added compatibility with extended labels',
+        'Fixed issues with quickfill items',
+        'Implemented profile management features'
       ],
-      releaseDateTime: '2024-08-14T08:59:45.831Z',
+      releaseDateTime: '2024-09-24T22:34:32.910Z',
     };
   }
 
@@ -27,18 +29,27 @@ export class AppService {
         name: 'Controller Plugin',
         bgImageUrl:
           'https://images.unsplash.com/photo-1646768843273-4dbb7a174a4d?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-        latestVersion: '1.1.1',
+        latestVersion: '1.1.2',
         description:
           "The vatACARS plugin for vatSys is a purpose-built CPDLC interface that helps streamline a controller's workflow. It connects directly with Hoppies ACARS, allowing controllers to easily link up with pilots using our pilot client or various other available options.",
         latestChangelog: [
           {
             logType: 1,
-            label: 'Fixed a crash related to vatSys controls update',
+            label: 'Added compatibility with extended labels',
+          }, {
+            logType: 1,
+            label: 'Fixed issues with quickfill items'
+          }, {
+            logType: 1,
+            label: 'Implemented profile management features'
+          }, {
+            logType: 3,
+            label: 'Numerous other bug fixes and improvements.'
           }
         ],
         availableDownloads: [
           {
-            version: '1.1.1',
+            version: '1.1.2',
             label: 'Stable',
           },
         ],
